@@ -1,6 +1,6 @@
 # Jetpack Compose Tutorial
 
-Some examples for learning Jetpack Compose
+Some examples for learning Android Jetpack Compose.
 
 ## Reference
 
