@@ -1,4 +1,4 @@
-# JetpackComposeFundamentals
+# Jetpack Compose Tutorial
 
 Some examples for learning Jetpack Compose
 
