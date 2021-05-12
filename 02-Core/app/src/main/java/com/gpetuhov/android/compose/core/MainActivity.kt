@@ -50,7 +50,10 @@ fun MainScreen2() {
         modifier = Modifier.fillMaxSize()
     ) {
         // Row can have many children arranged horizontally
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
             VerticalBar(color = Color.Yellow)
             VerticalBar(color = Color.Green)
             VerticalBar(color = Color.Red)
