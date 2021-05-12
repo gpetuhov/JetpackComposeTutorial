@@ -3,9 +3,8 @@ package com.gpetuhov.android.compose.basics
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -41,6 +40,15 @@ fun MainActivityUI() {
 //        modifier = Modifier
 //            .size(width = 200.dp, height = 48.dp)
 
+    // same as width = match_parent
+    // Modifier.fillMaxWidth()
+
+    // same as height = match_parent
+    // Modifier.fillMaxHeight()
+
+    // Make widget clickable (for example, Text):
+    // Modifier.clickable(onClick = { onTextClick() })
+
     ) {
         Text(text = "Press me")
     }
@@ -55,5 +63,9 @@ fun DefaultPreview() {
 }
 
 private fun onButtonClick() {
+    // TODO
+}
+
+private fun onTextClick() {
     // TODO
 }
