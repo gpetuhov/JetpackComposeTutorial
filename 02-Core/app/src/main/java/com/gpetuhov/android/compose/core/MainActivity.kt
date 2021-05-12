@@ -51,21 +51,21 @@ fun MainScreen2() {
     ) {
         // Row can have many children arranged horizontally
         Row {
-            Surface(
-                color = Color.Yellow,
-                modifier = Modifier
-                    .height(300.dp)
-                    .width(60.dp)
-            ) { }
-
-            Surface(
-                color = Color.Green,
-                modifier = Modifier
-                    .height(300.dp)
-                    .width(60.dp)
-            ) { }
+            VerticalBar(color = Color.Yellow)
+            VerticalBar(color = Color.Green)
+            VerticalBar(color = Color.Red)
         }
     }
+}
+
+@Composable
+fun VerticalBar(color: Color) {
+    Surface(
+        color = color,
+        modifier = Modifier
+            .height(300.dp)
+            .width(60.dp)
+    ) { }
 }
 
 @Preview(showBackground = true)
