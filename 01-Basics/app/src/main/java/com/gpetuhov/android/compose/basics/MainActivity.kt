@@ -3,6 +3,7 @@ package com.gpetuhov.android.compose.basics
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -26,12 +27,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainActivityUI() {
-    Greeting("Android")
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+    Button(onClick = { onButtonClick() }) {
+        Text(text = "Press me")
+    }
 }
 
 @Preview(showBackground = true)
@@ -40,4 +38,8 @@ fun DefaultPreview() {
     JetpackComposeBasicsTheme {
         MainActivityUI()
     }
+}
+
+private fun onButtonClick() {
+    // TODO
 }
