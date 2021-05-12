@@ -11,13 +11,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.gpetuhov.android.compose.basics.ui.theme.JetpackComposeBasicsTheme
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalComposeApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -55,21 +61,30 @@ fun MainActivityUI() {
     }
 }
 
+@ExperimentalComposeApi
 @Composable
 fun MainActivityUI2() {
     // There are no margins (because there is no box model),
-    // but we can combine multiple paddings
+    // but we can combine multiple paddings.
+
+    // Order of the modifiers matters!
 
     Text(
         text = "Hello, world",
         modifier = Modifier
-            .clickable(onClick = { onTextClick() }) // make widget clickable
             .padding(16.dp) // this works like margin
+            .clickable(onClick = { onTextClick() }) // make widget clickable
             .border(1.dp, Color.Black)
-            .padding(16.dp) // this works like padding
+            .padding(16.dp), // this works like padding
+        style = TextStyle(
+            color = Color.Blue,
+            fontWeight = FontWeight.Bold,
+            fontSize = TextUnit(18f, TextUnitType.Sp)
+        )
     )
 }
 
+@ExperimentalComposeApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
