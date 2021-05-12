@@ -5,14 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.gpetuhov.android.compose.core.ui.theme.JetpackComposeCoreTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +33,9 @@ fun MainScreen() {
         // This Surface acts like a background of the Text.
         Surface(
             color = Color.Yellow,
-            modifier = Modifier.wrapContentSize() // now this Surface has size of its contents, not the parent
+            modifier = Modifier.wrapContentSize( // now this Surface has size of its contents, not the parent
+                align = Alignment.TopCenter // we can change alignment of Composables, which wrap their content
+            )
         ) {
             Text(text = "Hello, world")
         }
