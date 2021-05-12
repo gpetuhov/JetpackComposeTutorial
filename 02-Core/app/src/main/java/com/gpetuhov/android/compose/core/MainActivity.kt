@@ -51,8 +51,8 @@ fun MainScreen2() {
     ) {
         // Row can have many children arranged horizontally
         Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             VerticalBar(color = Color.Yellow)
             VerticalBar(color = Color.Green)
