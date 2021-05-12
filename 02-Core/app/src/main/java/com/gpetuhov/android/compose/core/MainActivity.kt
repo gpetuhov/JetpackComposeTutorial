@@ -30,10 +30,14 @@ fun MainScreen() {
         color = Color.DarkGray,
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = "Hello, world",
-            modifier = Modifier.wrapContentSize()   // now Text has size of its contents, not the parent
-        )
+        // We can nest as many Composables, as needed.
+        // This Surface acts like a background of the Text.
+        Surface(
+            color = Color.Yellow,
+            modifier = Modifier.wrapContentSize() // now this Surface has size of its contents, not the parent
+        ) {
+            Text(text = "Hello, world")
+        }
     }
 }
 
