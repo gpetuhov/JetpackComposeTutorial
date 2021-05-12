@@ -76,11 +76,18 @@ fun MainActivityUI2() {
             .clickable(onClick = { onTextClick() }) // make widget clickable
             .border(1.dp, Color.Black)
             .padding(16.dp), // this works like padding
-        style = TextStyle(
-            color = Color.Blue,
-            fontWeight = FontWeight.Bold,
-            fontSize = TextUnit(18f, TextUnitType.Sp)
-        )
+
+        // we can set our own style
+//        style = TextStyle(
+//            color = Color.Blue,
+//            fontWeight = FontWeight.Bold,
+//            fontSize = TextUnit(18f, TextUnitType.Sp)
+//        )
+
+        // but it is easier to use Material styles
+        // and customize only the required properties
+        style = MaterialTheme.typography.button,
+        color = Color.Blue
     )
 }
 
