@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen3()
+            MainScreen4()
         }
     }
 }
@@ -74,6 +74,9 @@ fun NamesListWithState() {
 
 @Composable
 fun MainScreen3() {
+    // Here all state is contained in the top-level Composable.
+    // But it is even more better to lift up the state into ViewModel - see MainScreen4
+
     val namesListState = remember {
         mutableStateListOf("John", "Bill", "Kate")
     }
@@ -116,8 +119,37 @@ fun NamesList(
     }
 }
 
+@Composable
+fun MainScreen4() {
+    val newNameState = remember {
+        mutableStateOf("")
+    }
+
+    Column {
+        NameInput(
+            textFieldValue = newNameState.value,
+            onTextInputChange = { newValue -> newNameState.value = newValue }
+        )
+    }
+}
+
+@Composable
+fun NameInput(
+    textFieldValue: String,
+    onTextInputChange: (newValue: String) -> Unit
+) {
+    TextField(
+        value = textFieldValue,
+        onValueChange = onTextInputChange
+    )
+
+    Button(onClick = { /* Do nothing */ }) {
+        Text(text = textFieldValue)
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    MainScreen3()
+    MainScreen4()
 }
