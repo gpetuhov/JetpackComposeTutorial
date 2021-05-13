@@ -4,11 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
-val namesList = listOf("John", "Bill", "Kate")
+val namesList = mutableListOf(
+    "John",
+    "Bill",
+    "Kate"
+)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,15 +26,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-    NamesList(names = namesList)
+    Column {
+        NamesList()
+    }
 }
 
 @Composable
-fun NamesList(names: List<String>) {
-    Column {
-        names.forEach {
-            Text(text = it)
-        }
+fun NamesList() {
+    namesList.forEach {
+        Text(text = it)
+    }
+
+    Button(onClick = { namesList.add("New name") }) {
+        Text(text = "Add new name")
     }
 }
 
