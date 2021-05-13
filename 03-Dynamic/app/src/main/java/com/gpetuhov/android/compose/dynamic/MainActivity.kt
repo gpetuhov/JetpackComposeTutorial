@@ -8,10 +8,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 
 val namesList = mutableListOf(
     "John",
@@ -20,10 +22,16 @@ val namesList = mutableListOf(
 )
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         setContent {
-            MainScreen4()
+            MainScreen4(viewModel = viewModel)
         }
     }
 }
@@ -120,15 +128,16 @@ fun NamesList(
 }
 
 @Composable
-fun MainScreen4() {
-    val newNameState = remember {
-        mutableStateOf("")
-    }
+fun MainScreen4(viewModel: MainViewModel = MainViewModel()) {
+    // To convert LiveData into State add
+    // implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    // to module-level build.gradle script
+    val newNameState = viewModel.textFieldState.observeAsState("")
 
     Column {
         NameInput(
             textFieldValue = newNameState.value,
-            onTextInputChange = { newValue -> newNameState.value = newValue }
+            onTextInputChange = { newValue -> viewModel.onTextChanged(newValue) }
         )
     }
 }
