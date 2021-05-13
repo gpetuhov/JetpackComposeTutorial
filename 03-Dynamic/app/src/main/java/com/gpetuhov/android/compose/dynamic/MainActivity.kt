@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -72,21 +74,42 @@ fun NamesListWithState() {
 
 @Composable
 fun MainScreen3() {
-    val namesListState = remember { mutableStateListOf("John", "Bill", "Kate") }
+    val namesListState = remember {
+        mutableStateListOf("John", "Bill", "Kate")
+    }
+
+    val newNameState = remember {
+        mutableStateOf("")
+    }
 
     Column {
-        NamesList(namesListState) { namesListState.add("New name") }
+        NamesList(
+            names = namesListState,
+            textFieldValue = newNameState.value,
+            onButtonClick = {
+                namesListState.add(newNameState.value)
+                newNameState.value = ""
+            },
+            onTextInputChange = { newValue -> newNameState.value = newValue }
+        )
     }
 }
 
 @Composable
 fun NamesList(
     names: List<String>,
-    onButtonClick: () -> Unit
+    textFieldValue: String,
+    onButtonClick: () -> Unit,
+    onTextInputChange: (newValue: String) -> Unit
 ) {
     names.forEach {
         Text(text = it)
     }
+
+    TextField(
+        value = textFieldValue,
+        onValueChange = onTextInputChange
+    )
 
     Button(onClick = onButtonClick) {
         Text(text = "Add new name")
