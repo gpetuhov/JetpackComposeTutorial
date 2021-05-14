@@ -42,8 +42,9 @@ fun MainScreen() {
             modifier = Modifier.fillMaxSize()
         ) {
             Column {
-                ProfileCard()
-                ProfileCard()
+                userList.forEach { user ->
+                    ProfileCard(user = user)
+                }
             }
         }
     }
@@ -62,7 +63,7 @@ fun AppBar() {
 }
 
 @Composable
-fun ProfileCard() {
+fun ProfileCard(user: User) {
     Card(
         modifier = Modifier
             .padding(top = 8.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
@@ -76,25 +77,26 @@ fun ProfileCard() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture()
-            ProfileContent()
+            ProfilePicture(user)
+            ProfileContent(user)
         }
     }
 }
 
 @Composable
-fun ProfilePicture() {
+fun ProfilePicture(user: User) {
     Card(
         shape = CircleShape,
         border = BorderStroke(
             width = 2.dp,
-            color = MaterialTheme.colors.lightGreen
+            color = if (user.isOnline) MaterialTheme.colors.lightGreen
+                    else Color.Red
         ),
         modifier = Modifier.padding(16.dp),
         elevation = 4.dp
     ) {
         Image(
-            painter = painterResource(id = R.drawable.avatar03),
+            painter = painterResource(id = user.drawableId),
             contentDescription = stringResource(id = R.string.app_name),
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
@@ -103,14 +105,14 @@ fun ProfilePicture() {
 }
 
 @Composable
-fun ProfileContent() {
+fun ProfileContent(user: User) {
     Column(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {
         Text(
-            text = "Kate Smith",
+            text = user.name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.h5
@@ -119,7 +121,7 @@ fun ProfileContent() {
         // this adds alpha
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = "Active now",
+                text = if (user.isOnline) "Active now" else "Offline",
                 style = MaterialTheme.typography.body2
             )
         }
