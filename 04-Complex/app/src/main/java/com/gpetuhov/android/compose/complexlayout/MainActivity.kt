@@ -23,6 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
 import com.gpetuhov.android.compose.complexlayout.ui.theme.MyTheme
 import com.gpetuhov.android.compose.complexlayout.ui.theme.lightGreen
 
@@ -99,8 +101,12 @@ fun ProfilePicture(user: User) {
         elevation = 4.dp
     ) {
         Image(
-            painter = painterResource(id = user.drawableId),
-            contentDescription = stringResource(id = R.string.app_name),
+            painter = rememberCoilPainter(
+                request = user.pictureUrl,
+                previewPlaceholder = R.drawable.ic_baseline_person_24
+
+            ),
+            contentDescription = "Profile picture",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
         )
