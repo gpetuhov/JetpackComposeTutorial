@@ -18,12 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.CoilImage
 import com.google.accompanist.coil.rememberCoilPainter
 import com.gpetuhov.android.compose.complexlayout.ui.theme.MyTheme
 import com.gpetuhov.android.compose.complexlayout.ui.theme.lightGreen
@@ -33,14 +31,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                MainScreen()
+                UserListScreen()
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun UserListScreen() {
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
@@ -82,14 +80,14 @@ fun ProfileCard(user: User) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture(user)
-            ProfileContent(user)
+            ProfilePicture(user = user, imageSize = 72.dp)
+            ProfileContent(user = user, alignment = Alignment.Start)
         }
     }
 }
 
 @Composable
-fun ProfilePicture(user: User) {
+fun ProfilePicture(user: User, imageSize: Dp) {
     Card(
         shape = CircleShape,
         border = BorderStroke(
@@ -107,18 +105,18 @@ fun ProfilePicture(user: User) {
 
             ),
             contentDescription = "Profile picture",
-            modifier = Modifier.size(72.dp),
+            modifier = Modifier.size(imageSize),
             contentScale = ContentScale.Crop
         )
     }
 }
 
 @Composable
-fun ProfileContent(user: User) {
+fun ProfileContent(user: User, alignment: Alignment.Horizontal) {
     Column(
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalAlignment = alignment
     ) {
         // this adds alpha
         CompositionLocalProvider(
@@ -142,10 +140,36 @@ fun ProfileContent(user: User) {
     }
 }
 
+@Composable
+fun UserDetailsScreen(user: User) {
+    Scaffold(topBar = { AppBar() }) {
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                ProfilePicture(user = user, imageSize = 240.dp)
+                ProfileContent(user = user, alignment = Alignment.CenterHorizontally)
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun UserListScreenPreview() {
     MyTheme {
-        MainScreen()
+        UserListScreen()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UserDetailsScreenPreview() {
+    MyTheme {
+        UserDetailsScreen(user = userList[0])
     }
 }
