@@ -24,10 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigate
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import com.google.accompanist.coil.rememberCoilPainter
 import com.gpetuhov.android.compose.complexlayout.ui.theme.MyTheme
 import com.gpetuhov.android.compose.complexlayout.ui.theme.lightGreen
@@ -51,8 +49,14 @@ fun UserApplication() {
         composable("users_list") {
             UserListScreen(users = userList, navController = navController)
         }
-        composable("user_details") {
-            UserDetailsScreen(userList[0])
+
+        composable(
+            route = "user_details/{userId}",
+            arguments = listOf(
+                navArgument("userId") { type = NavType.IntType }
+            )
+        ) { navBackStackEntry ->
+            UserDetailsScreen(navBackStackEntry.arguments!!.getInt("userId"))
         }
     }
 }
@@ -67,7 +71,7 @@ fun UserListScreen(users: List<User> = userList, navController: NavHostControlle
             LazyColumn {
                 items(users) { user ->
                     ProfileCard(user = user) {
-                        navController?.navigate(route = "user_details")
+                        navController?.navigate(route = "user_details/${user.id}")
                     }
                 }
             }
@@ -76,7 +80,8 @@ fun UserListScreen(users: List<User> = userList, navController: NavHostControlle
 }
 
 @Composable
-fun UserDetailsScreen(user: User) {
+fun UserDetailsScreen(userId: Int) {
+    val user = userList.first { it.id == userId }
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
@@ -193,6 +198,6 @@ fun UserListScreenPreview() {
 @Composable
 fun UserDetailsScreenPreview() {
     MyTheme {
-        UserDetailsScreen(user = userList[0])
+        UserDetailsScreen(userId = 0)
     }
 }
