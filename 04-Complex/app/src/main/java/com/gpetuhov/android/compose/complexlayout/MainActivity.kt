@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +23,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.coil.rememberCoilPainter
 import com.gpetuhov.android.compose.complexlayout.ui.theme.MyTheme
 import com.gpetuhov.android.compose.complexlayout.ui.theme.lightGreen
@@ -31,23 +37,57 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                UserListScreen()
+                UserApplication()
             }
         }
     }
 }
 
 @Composable
-fun UserListScreen() {
+fun UserApplication() {
+    val navController = rememberNavController()
+    
+    NavHost(navController = navController, startDestination = "users_list") {
+        composable("users_list") {
+            UserListScreen(users = userList, navController = navController)
+        }
+        composable("user_details") {
+            UserDetailsScreen(userList[0])
+        }
+    }
+}
+
+@Composable
+fun UserListScreen(users: List<User> = userList, navController: NavHostController?) {
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
             // This is like RecyclerView
             LazyColumn {
-                items(userList) { user ->
-                    ProfileCard(user = user)
+                items(users) { user ->
+                    ProfileCard(user = user) {
+                        navController?.navigate(route = "user_details")
+                    }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun UserDetailsScreen(user: User) {
+    Scaffold(topBar = { AppBar() }) {
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                ProfilePicture(user = user, imageSize = 240.dp)
+                ProfileContent(user = user, alignment = Alignment.CenterHorizontally)
             }
         }
     }
@@ -66,12 +106,13 @@ fun AppBar() {
 }
 
 @Composable
-fun ProfileCard(user: User) {
+fun ProfileCard(user: User, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(top = 8.dp, bottom = 4.dp, start = 16.dp, end = 16.dp)
             .fillMaxWidth()
-            .wrapContentHeight(align = Alignment.Top),
+            .wrapContentHeight(align = Alignment.Top)
+            .clickable(onClick = onClick),
         elevation = 8.dp,
         backgroundColor = Color.White
     ) {
@@ -140,29 +181,11 @@ fun ProfileContent(user: User, alignment: Alignment.Horizontal) {
     }
 }
 
-@Composable
-fun UserDetailsScreen(user: User) {
-    Scaffold(topBar = { AppBar() }) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                ProfilePicture(user = user, imageSize = 240.dp)
-                ProfileContent(user = user, alignment = Alignment.CenterHorizontally)
-            }
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun UserListScreenPreview() {
     MyTheme {
-        UserListScreen()
+        UserListScreen(users = userList, navController = null)
     }
 }
 
