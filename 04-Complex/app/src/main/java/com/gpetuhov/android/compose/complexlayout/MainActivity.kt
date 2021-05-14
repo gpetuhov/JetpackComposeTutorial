@@ -111,14 +111,19 @@ fun ProfileContent(user: User) {
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = user.name,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.h5
-        )
-
         // this adds alpha
+        CompositionLocalProvider(
+            LocalContentAlpha provides
+                    if (user.isOnline) 1f else ContentAlpha.medium
+        ) {
+            Text(
+                text = user.name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.h5
+            )
+        }
+
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
                 text = if (user.isOnline) "Active now" else "Offline",
