@@ -3,7 +3,9 @@ package com.gpetuhov.android.compose.basicscodelab
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                Greeting("Android")
+                MyScreenContent()
             }
         }
     }
@@ -36,6 +38,18 @@ fun MyApp(content: @Composable () -> Unit) {
 }
 
 @Composable
+fun MyScreenContent() {
+    Column {
+        Greeting("Android")
+
+        // Creates horizontal divider
+        Divider(color = Color.Black)
+
+        Greeting("there")
+    }
+}
+
+@Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!", modifier = Modifier.padding(24.dp))
 }
@@ -44,6 +58,6 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     MyApp {
-        Greeting("Android")
+        MyScreenContent()
     }
 }
