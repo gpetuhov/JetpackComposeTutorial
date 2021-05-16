@@ -17,16 +17,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp()
+            MyApp {
+                Greeting("Android")
+            }
         }
     }
 }
 
+// This way MyApp composable can be reused throughout the app
+// (this is called a container composable function)
 @Composable
-fun MyApp() {
-    JetpackComposeBasicsCodelabTheme {
+fun MyApp(content: @Composable () -> Unit) {
+    JetpackComposeBasicsCodelabTheme() {
         Surface(color = Color.Yellow) {
-            Greeting(name = "Android")
+            content()
         }
     }
 }
@@ -39,5 +43,7 @@ fun Greeting(name: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApp()
+    MyApp {
+        Greeting("Android")
+    }
 }
