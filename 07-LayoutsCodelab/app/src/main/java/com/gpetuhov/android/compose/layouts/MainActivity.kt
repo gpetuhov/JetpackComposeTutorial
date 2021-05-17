@@ -3,10 +3,8 @@ package com.gpetuhov.android.compose.layouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.rememberCoilPainter
 import com.gpetuhov.android.compose.layouts.ui.theme.JetpackComposeLayoutsTheme
 
 class MainActivity : ComponentActivity() {
@@ -109,8 +108,27 @@ fun LazyList() {
     // LazyColumn renders only visible items
     LazyColumn(state = scrollState) {
         items(100) {
-            Text("Item #$it")
-        }
+            ImageListItem(index = it)
+        }   
+    }
+}
+
+@Composable
+fun ImageListItem(index: Int) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+
+        // Here we use Accompanist to load images from the network.
+        // Add to build.gradle script:
+        // implementation "com.google.accompanist:accompanist-coil:0.9.1"
+        Image(
+            painter = rememberCoilPainter(
+                request = "https://developer.android.com/images/brand/Android_Robot.png"
+            ),
+            contentDescription = "Android Logo",
+            modifier = Modifier.size(50.dp)
+        )
+        Spacer(Modifier.width(10.dp))
+        Text("Item #$index", style = MaterialTheme.typography.subtitle1)
     }
 }
 

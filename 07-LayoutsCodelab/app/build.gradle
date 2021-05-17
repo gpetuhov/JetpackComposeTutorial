@@ -61,4 +61,7 @@ dependencies {
 
     // Material icons
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-coil:0.9.1"
 }
