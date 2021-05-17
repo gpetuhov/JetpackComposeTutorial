@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
             JetpackComposeLayoutsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    LayoutsCodelab()
                 }
             }
         }
@@ -34,10 +34,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(
-        text = "Hello $name!",
-    )
+fun LayoutsCodelab() {
+    Scaffold { innerPadding ->
+        // innerPadding is the padding that should be applied
+        // to the content root composable to constrain
+        // the items appropriately on the screen.
+        Text(text = "Hi there!", modifier = Modifier.padding(innerPadding))
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LayoutsCodelabPreview() {
+    JetpackComposeLayoutsTheme {
+        LayoutsCodelab()
+    }
 }
 
 @Composable
@@ -67,13 +78,5 @@ fun PhotographerCard(modifier: Modifier = Modifier) {
 fun PhotographerCardPreview() {
     JetpackComposeLayoutsTheme {
         PhotographerCard()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    JetpackComposeLayoutsTheme {
-        Greeting("Android")
     }
 }
