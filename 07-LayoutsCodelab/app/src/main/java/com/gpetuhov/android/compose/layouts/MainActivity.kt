@@ -39,7 +39,17 @@ fun LayoutsCodelab() {
         // innerPadding is the padding that should be applied
         // to the content root composable to constrain
         // the items appropriately on the screen.
-        Text(text = "Hi there!", modifier = Modifier.padding(innerPadding))
+        BodyContent(Modifier.padding(innerPadding))
+    }
+}
+
+// To make our code more reusable and testable, we should structure it into small chunks
+// To make our code more reusable and testable, we should structure it into small chunks
+@Composable
+fun BodyContent(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(text = "Hi there!")
+        Text(text = "Thanks for going through the Layouts codelab")
     }
 }
 
