@@ -3,12 +3,13 @@ package com.gpetuhov.android.compose.layouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -63,7 +64,10 @@ fun LayoutsCodelab() {
         // innerPadding is the padding that should be applied
         // to the content root composable to constrain
         // the items appropriately on the screen.
-        BodyContent(Modifier.padding(innerPadding).padding(8.dp))
+        BodyContent(
+            Modifier
+                .padding(innerPadding)
+                .padding(8.dp))
     }
 }
 
@@ -74,6 +78,21 @@ fun BodyContent(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(text = "Hi there!")
         Text(text = "Thanks for going through the Layouts codelab")
+        SimpleList()
+    }
+}
+
+@Composable
+fun SimpleList() {
+    // We save the scrolling position with this state that can also
+    // be used to programmatically scroll the list
+    val scrollState = rememberScrollState()
+
+    // This is how to make the Column scrollable
+    Column(Modifier.verticalScroll(scrollState)) {
+        repeat(100) {
+            Text("Item #$it")
+        }
     }
 }
 
