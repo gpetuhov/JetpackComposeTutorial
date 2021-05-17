@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -78,7 +80,7 @@ fun BodyContent(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(text = "Hi there!")
         Text(text = "Thanks for going through the Layouts codelab")
-        SimpleList()
+        LazyList()
     }
 }
 
@@ -88,9 +90,25 @@ fun SimpleList() {
     // be used to programmatically scroll the list
     val scrollState = rememberScrollState()
 
-    // This is how to make the Column scrollable
+    // This is how to make the Column scrollable.
+    // Note: The Column renders all the list items,
+    // even the ones not visible on the screen.
     Column(Modifier.verticalScroll(scrollState)) {
         repeat(100) {
+            Text("Item #$it")
+        }
+    }
+}
+
+@Composable
+fun LazyList() {
+    // We save the scrolling position with this state that can also
+    // be used to programmatically scroll the list
+    val scrollState = rememberLazyListState()
+
+    // LazyColumn renders only visible items
+    LazyColumn(state = scrollState) {
+        items(100) {
             Text("Item #$it")
         }
     }
