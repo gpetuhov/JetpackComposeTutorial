@@ -35,7 +35,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LayoutsCodelab() {
-    Scaffold { innerPadding ->
+    // Scaffold has slots for top bar, bottom bar, FAB, drawer and content.
+    // Most Composable have slots for content.
+    // This is called Slot API.
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "LayoutsCodelab")
+                }
+            )
+        }
+    ) { innerPadding ->
+        // This is content.
         // innerPadding is the padding that should be applied
         // to the content root composable to constrain
         // the items appropriately on the screen.
@@ -43,7 +55,6 @@ fun LayoutsCodelab() {
     }
 }
 
-// To make our code more reusable and testable, we should structure it into small chunks
 // To make our code more reusable and testable, we should structure it into small chunks
 @Composable
 fun BodyContent(modifier: Modifier = Modifier) {
