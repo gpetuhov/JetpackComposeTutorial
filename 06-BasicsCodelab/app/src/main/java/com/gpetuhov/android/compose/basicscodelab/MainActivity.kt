@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
@@ -44,14 +45,19 @@ fun MyApp(content: @Composable () -> Unit) {
 fun MyScreenContent(names: List<String> = listOf("Android", "there")) {
     val counterState = remember { mutableStateOf(0) }
 
-    Column {
-        for (name in names) {
-            Greeting(name = name)
-            Divider(color = Color.Black)
-        }
+    // fillMaxHeight here is needed to occupy all the screen
+    Column(modifier = Modifier.fillMaxHeight()) {
+        // This Column has weight of 1,
+        // so it will occupy all available space of the parent.
+        // This will place Counter at the bottom of the parent.
+        Column(modifier = Modifier.weight(1f)) {
+            for (name in names) {
+                Greeting(name = name)
 
-        // Creates horizontal divider
-        Divider(color = Color.Transparent, thickness = 32.dp)
+                // Creates horizontal divider
+                Divider(color = Color.Black)
+            }
+        }
 
         Counter(
             count = counterState.value,
