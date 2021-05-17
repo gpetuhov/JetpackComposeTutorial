@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -39,27 +41,43 @@ fun MyApp(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun MyScreenContent(names: List<String> = listOf("Android", "there")) {
+fun MyScreenContent(names: List<String> = List(1000) { "Hello Android #$it" }) {
     val counterState = remember { mutableStateOf(0) }
 
     // fillMaxHeight here is needed to occupy all the screen
     Column(modifier = Modifier.fillMaxHeight()) {
-        // This Column has weight of 1,
+        // This Composable has weight of 1,
         // so it will occupy all available space of the parent.
         // This will place Counter at the bottom of the parent.
-        Column(modifier = Modifier.weight(1f)) {
-            for (name in names) {
-                Greeting(name = name)
-
-                // Creates horizontal divider
-                Divider(color = Color.Black)
-            }
-        }
+        NameList(names, Modifier.weight(1f))
 
         Counter(
             count = counterState.value,
             updateCount = { newCount ->
                 counterState.value = newCount
+            }
+        )
+    }
+}
+
+@Composable
+fun NameList(names: List<String>, modifier: Modifier = Modifier) {
+    // This is like RecyclerView (renders only the visible items on screen).
+    // Note: LazyColumn doesn't recycle its children like RecyclerView.
+    // It emits new Composables as you scroll through it and is still performant
+    // as emitting Composables is relatively cheap compared to
+    // instantiating Android Views.
+    // Note 2: Another option is to use ScrollableColumn,
+    // which is equivalent to ScrollView (renders all its children at the same time),
+    // but this does not fit for lists with many items.
+    LazyColumn(modifier = modifier) {
+        items(
+            items = names,
+            itemContent = { name ->
+                Greeting(name = name)
+
+                // Creates horizontal divider
+                Divider(color = Color.Black)
             }
         )
     }
