@@ -48,6 +48,11 @@ fun LayoutsCodelab() {
                 },
                 actions = {
                     IconButton(onClick = { /* doSomething() */ }) {
+                        // To get more icons, add
+                        // implementation "androidx.compose.material:material-icons-extended:$compose_version"
+                        // to build.gradle script.
+                        // Names of the icons are the same as here:
+                        // https://fonts.google.com/icons?selected=Material+Icons
                         Icon(Icons.Filled.Favorite, contentDescription = null)
                     }
                 }
@@ -58,11 +63,12 @@ fun LayoutsCodelab() {
         // innerPadding is the padding that should be applied
         // to the content root composable to constrain
         // the items appropriately on the screen.
-        BodyContent(Modifier.padding(innerPadding))
+        BodyContent(Modifier.padding(innerPadding).padding(8.dp))
     }
 }
 
-// To make our code more reusable and testable, we should structure it into small chunks
+// To make our code more reusable and testable, we should structure it into small chunks.
+// Always place modifier as the first parameter of your Composables.
 @Composable
 fun BodyContent(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
