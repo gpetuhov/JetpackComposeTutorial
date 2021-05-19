@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.atLeast
 import com.gpetuhov.android.compose.constraintlayout.ui.theme.JetpackComposeConstraintLayoutTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +23,7 @@ class MainActivity : ComponentActivity() {
             JetpackComposeConstraintLayoutTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    ConstraintLayoutContent2()
+                    LargeConstraintLayout()
                 }
             }
         }
@@ -91,10 +93,27 @@ fun ConstraintLayoutContent2() {
     }
 }
 
+// We can wrap content within constraints like this
+@Composable
+fun LargeConstraintLayout() {
+    ConstraintLayout {
+        val text = createRef()
+
+        val guideline = createGuidelineFromStart(0.5f)
+        Text(
+            "This is a very very very very very very very long text",
+            Modifier.constrainAs(text) {
+                linkTo(guideline, parent.end)
+                width = Dimension.preferredWrapContent.atLeast(100.dp)
+            }
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun ConstraintLayoutContentPreview() {
     JetpackComposeConstraintLayoutTheme {
-        ConstraintLayoutContent2()
+        LargeConstraintLayout()
     }
 }
