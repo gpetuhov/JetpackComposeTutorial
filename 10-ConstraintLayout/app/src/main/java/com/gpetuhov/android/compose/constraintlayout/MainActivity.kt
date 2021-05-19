@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             JetpackComposeConstraintLayoutTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    ConstraintLayoutContent()
+                    ConstraintLayoutContent2()
                 }
             }
         }
@@ -50,7 +50,44 @@ fun ConstraintLayoutContent() {
         // and constrain it to the bottom of the Button composable
         Text("Text", Modifier.constrainAs(text) {
             top.linkTo(button.bottom, margin = 16.dp)
+            // Centers Text horizontally in the ConstraintLayout
+            centerHorizontallyTo(parent)
         })
+    }
+}
+
+// We can use guidelines, barriers and chains
+@Composable
+fun ConstraintLayoutContent2() {
+    ConstraintLayout {
+        // Creates references for the three composables
+        // in the ConstraintLayout's body
+        val (button1, button2, text) = createRefs()
+
+        Button(
+            onClick = { /* Do something */ },
+            modifier = Modifier.constrainAs(button1) {
+                top.linkTo(parent.top, margin = 16.dp)
+            }
+        ) {
+            Text("Button 1")
+        }
+
+        Text("Text", Modifier.constrainAs(text) {
+            top.linkTo(button1.bottom, margin = 16.dp)
+            centerAround(button1.end)
+        })
+
+        val barrier = createEndBarrier(button1, text)
+        Button(
+            onClick = { /* Do something */ },
+            modifier = Modifier.constrainAs(button2) {
+                top.linkTo(parent.top, margin = 16.dp)
+                start.linkTo(barrier)
+            }
+        ) {
+            Text("Button 2")
+        }
     }
 }
 
@@ -58,6 +95,6 @@ fun ConstraintLayoutContent() {
 @Composable
 fun ConstraintLayoutContentPreview() {
     JetpackComposeConstraintLayoutTheme {
-        ConstraintLayoutContent()
+        ConstraintLayoutContent2()
     }
 }
