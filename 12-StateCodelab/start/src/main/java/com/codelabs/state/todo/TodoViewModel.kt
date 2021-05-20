@@ -16,22 +16,37 @@
 
 package com.codelabs.state.todo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+
+// These are required for mutableStatoOf() to work
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 class TodoViewModel : ViewModel() {
 
-    private var _todoItems = MutableLiveData(listOf<TodoItem>())
-    val todoItems: LiveData<List<TodoItem>> = _todoItems
+    // When hoisting state, there are three rules to help you figure out where it should go
+    // 1. State should be hoisted to at least the lowest common parent of all composables that use the state (or read)
+    // 2. State should be hoisted to at least the highest level it may be changed (or modified)
+    // 3. If two states change in response to the same events they should be hoisted together
 
+    // We can use state inside ViewModel, instead of LiveData.
+    // But if this ViewModel was also used by the View system,
+    // it would be better to continue using LiveData.
+    var todoItems: List<TodoItem> by mutableStateOf(listOf())
+        private set
+
+    // event: addItem
     fun addItem(item: TodoItem) {
-        _todoItems.value = _todoItems.value!! + listOf(item)
+        todoItems = todoItems + listOf(item)
     }
 
+    // event: removeItem
     fun removeItem(item: TodoItem) {
-        _todoItems.value = _todoItems.value!!.toMutableList().also {
+        // toMutableList makes a mutable copy of the list we can edit, then
+        // assign the new list to todoItems (which is still an immutable list)
+        todoItems = todoItems.toMutableList().also {
             it.remove(item)
         }
-    }
-}
+    }}
