@@ -50,6 +50,9 @@ import com.codelab.theming.ui.start.theme.JetnewsTheme
 
 @Composable
 fun Home() {
+    // We can check, if we are using light theme, like this
+    val isLightTheme = MaterialTheme.colors.isLight
+
     val featured = remember { PostRepo.getFeaturedPost() }
     val posts = remember { PostRepo.getPosts() }
     JetnewsTheme {
@@ -91,7 +94,10 @@ private fun AppBar() {
         title = {
             Text(text = stringResource(R.string.app_title))
         },
-        backgroundColor = MaterialTheme.colors.primary
+        // A common pattern is to color a container primary color in light theme
+        // and surface color in dark themes.
+        // To do this, use MaterialTheme.colors.primarySurface
+        backgroundColor = MaterialTheme.colors.primarySurface
     )
 }
 
