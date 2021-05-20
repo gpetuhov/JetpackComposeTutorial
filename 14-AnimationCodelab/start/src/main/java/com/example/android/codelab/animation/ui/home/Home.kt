@@ -393,10 +393,12 @@ private fun TopicRow(topic: String, expanded: Boolean, onClick: () -> Unit) {
         elevation = 2.dp
     ) {
         // TODO 3: Animate the size change of the content.
+        // We can animate content size with Modifier.animateContentSize() like this
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .animateContentSize()
         ) {
             Row {
                 Icon(
