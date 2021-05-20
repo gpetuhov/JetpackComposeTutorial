@@ -131,11 +131,6 @@ fun TodoRow(
 }
 
 @Composable
-fun TodoInputTextField(text: String, onTextChange: (String) -> Unit, modifier: Modifier) {
-    TodoInputText(text, onTextChange, modifier)
-}
-
-@Composable
 fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
 
     // You declare a MutableState object in a composable three ways:
@@ -155,7 +150,7 @@ fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp)
         ) {
-            TodoInputTextField(
+            TodoInputText(
                 text = text,
                 onTextChange = setText,
                 modifier = Modifier
