@@ -131,7 +131,12 @@ fun TodoRow(
 }
 
 @Composable
-fun TodoInputTextField(modifier: Modifier) {
+fun TodoInputTextField(text: String, onTextChange: (String) -> Unit, modifier: Modifier) {
+    TodoInputText(text, onTextChange, modifier)
+}
+
+@Composable
+fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
 
     // You declare a MutableState object in a composable three ways:
     // 1. val state = remember { mutableStateOf(default) }
@@ -145,25 +150,26 @@ fun TodoInputTextField(modifier: Modifier) {
     // it's updated so compose can recompose any composables that read it.
     val (text, setText) = remember { mutableStateOf("") }
 
-    TodoInputText(text, setText, modifier)
-}
-
-@Composable
-fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
-    // onItemComplete is an event will fire when an item is completed by the user
     Column {
         Row(Modifier
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp)
         ) {
-            TodoInputTextField(Modifier
-                .weight(1f)
-                .padding(end = 8.dp)
+            TodoInputTextField(
+                text = text,
+                onTextChange = setText,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
             )
             TodoEditButton(
-                onClick = { /* todo */ },
+                onClick = {
+                    onItemComplete(TodoItem(text)) // send onItemComplete event up
+                    setText("") // clear the internal text
+                },
                 text = "Add",
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
+                enabled = text.isNotBlank() // enable if text is not blank
             )
         }
     }
