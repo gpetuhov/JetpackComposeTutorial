@@ -41,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.theming.R
@@ -51,7 +52,7 @@ import com.codelab.theming.ui.start.theme.JetnewsTheme
 @Composable
 fun Home() {
     // We can check, if we are using light theme, like this
-    val isLightTheme = MaterialTheme.colors.isLight
+//    val isLightTheme = MaterialTheme.colors.isLight
 
     val featured = remember { PostRepo.getFeaturedPost() }
     val posts = remember { PostRepo.getPosts() }
@@ -116,6 +117,7 @@ fun Header(
     ) {
         Text(
             text = text,
+            style = MaterialTheme.typography.subtitle2,
             modifier = modifier
                 .fillMaxWidth()
                 .semantics { heading() }
@@ -167,16 +169,27 @@ private fun PostMetadata(
 ) {
     val divider = "  •  "
     val tagDivider = "  "
+
+    // If you need to apply multiple styles to some text,
+    // then you can use the AnnotatedString class to apply markup,
+    // adding SpanStyles to a range of text.
     val text = buildAnnotatedString {
         append(post.metadata.date)
         append(divider)
         append(stringResource(R.string.read_time, post.metadata.readTimeMinutes))
         append(divider)
+
+        val tagStyle = MaterialTheme.typography.overline.toSpanStyle().copy(
+            background = MaterialTheme.colors.primary.copy(alpha = 0.1f)
+        )
+
         post.tags.forEachIndexed { index, tag ->
             if (index != 0) {
                 append(tagDivider)
             }
-            append(" ${tag.toUpperCase()} ")
+            withStyle(tagStyle) {
+                append(" ${tag.toUpperCase()} ")
+            }
         }
     }
 
