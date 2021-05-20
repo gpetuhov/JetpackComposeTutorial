@@ -45,6 +45,9 @@ class TodoActivity : AppCompatActivity() {
     }
 }
 
+// Unidirectional data flow is a design where state flows down and events flow up
+// (in our example the stat flows down from the ViewModel to the UI
+// and events flow up from the UI to the ViewModel)
 @Composable
 private fun TodoActivityScreen(todoViewModel: TodoViewModel) {
     val items: List<TodoItem> by todoViewModel.todoItems.observeAsState(listOf())

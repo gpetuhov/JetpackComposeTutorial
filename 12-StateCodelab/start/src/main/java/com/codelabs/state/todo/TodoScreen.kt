@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -84,7 +85,27 @@ fun TodoScreen(
  * @param modifier modifier for this element
  */
 @Composable
-fun TodoRow(todo: TodoItem, onItemClicked: (TodoItem) -> Unit, modifier: Modifier = Modifier) {
+fun TodoRow(
+    todo: TodoItem,
+    onItemClicked: (TodoItem) -> Unit,
+    modifier: Modifier = Modifier,
+
+    // remember gives a composable function memory.
+    // A value computed by remember will be stored in the composition tree,
+    // and only be recomputed if the keys to remember change.
+    // You can think of remember as giving storage for a single object to a function
+    // the same way a private val property does in an object.
+    // Without remember() iconAlpha will be recalculated on every recomposition
+    // (and the icon tint of every item will change every time the list changes).
+    // To allow the caller to control this value,
+    // simply move the remember call to a default argument of a new iconAlpha parameter.
+    // Note: Values remembered in composition are forgotten as soon as their
+    // calling composable is removed from the tree.
+    // They will also be re-initialized if the calling composable moves in the tree.
+    // You can cause this in the LazyColumn by removing items at the top.
+    // Also values stored by remember are lost when LazyColumn is scrolled.
+    iconAlpha: Float = remember(todo.id) { randomTint() }
+) {
     Row(
         modifier = modifier
             .clickable { onItemClicked(todo) }
@@ -94,11 +115,14 @@ fun TodoRow(todo: TodoItem, onItemClicked: (TodoItem) -> Unit, modifier: Modifie
         Text(todo.task)
         Icon(
             imageVector = todo.icon.imageVector,
+            // LocalContentColor gives you the preferred color for content
+            // such as Icons and Typography.
+            // It is changed by composables such as Surface that draw a background.
+            tint = LocalContentColor.current.copy(alpha = iconAlpha),
             contentDescription = stringResource(id = todo.icon.contentDescription)
         )
     }
 }
-
 private fun randomTint(): Float {
     return Random.nextFloat().coerceIn(0.3f, 0.9f)
 }
