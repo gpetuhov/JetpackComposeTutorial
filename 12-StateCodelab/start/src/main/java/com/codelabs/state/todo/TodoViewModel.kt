@@ -34,8 +34,18 @@ class TodoViewModel : ViewModel() {
     // We can use state inside ViewModel, instead of LiveData.
     // But if this ViewModel was also used by the View system,
     // it would be better to continue using LiveData.
+    // Application state that's used outside of Compose should not use State<T> to hold the state.
     var todoItems: List<TodoItem> by mutableStateOf(listOf())
         private set
+
+    // Whenever a composable calls currentEditItem,
+    // it will observe changes to both todoItems and currentEditPosition.
+    // If either change, the composable will call the getter again to get the new value.
+    val currentEditItem: TodoItem?
+        get() = todoItems.getOrNull(currentEditPosition)
+
+    // private state
+    private var currentEditPosition by mutableStateOf(-1)
 
     // event: addItem
     fun addItem(item: TodoItem) {
@@ -49,4 +59,26 @@ class TodoViewModel : ViewModel() {
         todoItems = todoItems.toMutableList().also {
             it.remove(item)
         }
-    }}
+
+        onEditDone() // don't keep the editor open when removing items
+    }
+
+    fun onEditItemSelected(item: TodoItem) {
+        currentEditPosition = todoItems.indexOf(item)
+    }
+
+    fun onEditDone() {
+        currentEditPosition = -1
+    }
+
+    fun onEditItemChange(item: TodoItem) {
+        val currentItem = requireNotNull(currentEditItem)
+        require(currentItem.id == item.id) {
+            "You can only change an item with the same id as currentEditItem"
+        }
+
+        todoItems = todoItems.toMutableList().also {
+            it[currentEditPosition] = item
+        }
+    }
+}
