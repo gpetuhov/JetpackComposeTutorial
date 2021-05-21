@@ -58,7 +58,8 @@ enum class RallyScreen(
                 Accounts.name -> Accounts
                 Bills.name -> Bills
                 Overview.name -> Overview
-                else -> throw IllegalArgumentException("Route $route is not recognized.")
+//                else -> throw IllegalArgumentException("Route $route is not recognized.")
+                else -> Overview
             }
     }
 }

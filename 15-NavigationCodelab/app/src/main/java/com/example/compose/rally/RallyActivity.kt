@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.rally.ui.components.RallyTabRow
 import com.example.compose.rally.ui.theme.RallyTheme
@@ -52,18 +53,28 @@ class RallyActivity : ComponentActivity() {
 fun RallyApp() {
     RallyTheme {
         val allScreens = RallyScreen.values().toList()
-        var currentScreen by rememberSaveable { mutableStateOf(RallyScreen.Overview) }
 
         // Obtain a NavController by using the rememberNavController() function;
         // this creates and remembers a NavController which survives configuration changes
         // (using rememberSavable).
         val navController = rememberNavController()
 
+        // Navigation holds on to the back stack for you
+        // and can provide you with the current back stack entry as a State.
+        val backstackEntry = navController.currentBackStackEntryAsState()
+
+        // currentScreen uses the navigation backstack like this
+        val currentScreen = RallyScreen.fromRoute(
+            backstackEntry.value?.destination?.route
+        )
+
         Scaffold(
             topBar = {
                 RallyTabRow(
                     allScreens = allScreens,
-                    onTabSelected = { screen -> currentScreen = screen },
+                    onTabSelected = { screen ->
+                        navController.navigate(screen.name)
+                    },
                     currentScreen = currentScreen
                 )
             }
