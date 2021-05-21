@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import androidx.navigation.navDeepLink
 import com.example.compose.rally.data.UserData
 import com.example.compose.rally.ui.accounts.AccountsBody
 import com.example.compose.rally.ui.accounts.SingleAccountBody
@@ -126,7 +127,15 @@ fun RallyApp() {
                             // Make argument type safe
                             type = NavType.StringType
                         }
-                    )
+                    ),
+                    // Enable deep links from outside your app to individual accounts directly by name.
+                    // For this to work don't forget to add an intent filter for RallyActivity
+                    // in the manifest.
+                    // To test deep links run this command from the command line:
+                    // adb shell am start -d "rally://accounts/Checking" -a android.intent.action.VIEW
+                    deepLinks =  listOf(navDeepLink {
+                        uriPattern = "rally://$accountsName/{name}"
+                    })
                 ) { entry ->
                     // The body of each composable destination receives a parameter
                     // of the current NavBackStackEntry which models the route and arguments
