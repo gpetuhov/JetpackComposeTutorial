@@ -29,12 +29,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import com.example.compose.rally.data.UserData
 import com.example.compose.rally.ui.accounts.AccountsBody
+import com.example.compose.rally.ui.accounts.SingleAccountBody
 import com.example.compose.rally.ui.bills.BillsBody
 import com.example.compose.rally.ui.components.RallyTabRow
 import com.example.compose.rally.ui.overview.OverviewBody
@@ -106,6 +105,31 @@ fun RallyApp() {
                 }
                 composable(RallyScreen.Bills.name) {
                     BillsBody(bills = UserData.bills)
+                }
+
+                val accountsName = RallyScreen.Accounts.name
+
+                // Destination with named argument
+                composable(
+                    route = "$accountsName/{name}",
+                    arguments = listOf(
+                        navArgument("name") {
+                            // Make argument type safe
+                            type = NavType.StringType
+                        }
+                    )
+                ) { entry ->
+                    // The body of each composable destination receives a parameter
+                    // of the current NavBackStackEntry which models the route and arguments
+                    // of the current destination. We can use arguments to retrieve the argument
+                    // (name in our example)
+
+                    // Look up "name" in NavBackStackEntry's arguments
+                    val accountName = entry.arguments?.getString("name")
+                    // Find first name match in UserData
+                    val account = UserData.getAccount(accountName)
+                    // Pass account to SingleAccountBody
+                    SingleAccountBody(account = account)
                 }
             }
         }
