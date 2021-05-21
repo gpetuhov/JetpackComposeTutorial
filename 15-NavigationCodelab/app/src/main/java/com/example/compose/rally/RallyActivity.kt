@@ -61,6 +61,8 @@ fun RallyApp() {
         // Obtain a NavController by using the rememberNavController() function;
         // this creates and remembers a NavController which survives configuration changes
         // (using rememberSavable).
+        // It is better to keep the navController at the top level of your navigation hierarchy
+        // and not pass it directly into child composables (instead use callbacks, when needed).
         val navController = rememberNavController()
 
         // Navigation holds on to the back stack for you
@@ -94,7 +96,10 @@ fun RallyApp() {
                 // Here we declare navigation graph
 
                 composable(RallyScreen.Overview.name) {
-                    OverviewBody()
+                    OverviewBody(
+                        onClickSeeAllAccounts = { navController.navigate(RallyScreen.Accounts.name) },
+                        onClickSeeAllBills = { navController.navigate(RallyScreen.Bills.name) },
+                    )
                 }
                 composable(RallyScreen.Accounts.name) {
                     AccountsBody(accounts = UserData.accounts)
