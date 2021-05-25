@@ -1,6 +1,8 @@
 package com.example.compose.rally
 
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import com.example.compose.rally.ui.components.RallyTopAppBar
 import org.junit.Rule
 import org.junit.Test
@@ -16,7 +18,7 @@ class TopAppBarTest {
     // but it is much easier to test a component in isolation using setContent.
 
     @Test
-    fun rallyTopAppBarTest() {
+    fun rallyTopAppBarTest_currentTabSelected() {
         val allScreens = RallyScreen.values().toList()
         composeTestRule.setContent {
             RallyTopAppBar(
@@ -26,7 +28,9 @@ class TopAppBarTest {
             )
         }
 
-        // This is needed just to see, what's going on. It is not required for testing
-        Thread.sleep(5000)
+        // Look for a content description and asserts that it exists
+        composeTestRule
+            .onNodeWithContentDescription(RallyScreen.Accounts.name)
+            .assertIsSelected()
     }
 }
