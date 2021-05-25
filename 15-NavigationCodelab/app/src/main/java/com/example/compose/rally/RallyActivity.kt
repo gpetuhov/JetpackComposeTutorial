@@ -86,70 +86,81 @@ fun RallyApp() {
                 )
             }
         ) { innerPadding ->
-
-            // The NavHost links the NavController with a navigation graph
-            // where composable destinations are specified.
-            NavHost(
+            RallyNavHost(
                 navController = navController,
-                startDestination = RallyScreen.Overview.name,
                 modifier = Modifier.padding(innerPadding)
-            ) {
-                // Here we declare navigation graph
+            )
+        }
+    }
+}
 
-                composable(RallyScreen.Overview.name) {
-                    OverviewBody(
-                        onClickSeeAllAccounts = { navController.navigate(RallyScreen.Accounts.name) },
-                        onClickSeeAllBills = { navController.navigate(RallyScreen.Bills.name) },
-                        onAccountClick = { name ->
-                            navigateToSingleAccount(navController, name)
-                        }
-                    )
-                }
-                composable(RallyScreen.Accounts.name) {
-                    AccountsBody(accounts = UserData.accounts) { name ->
-                        navigateToSingleAccount(
-                            navController = navController,
-                            accountName = name
-                        )
-                    }
-                }
-                composable(RallyScreen.Bills.name) {
-                    BillsBody(bills = UserData.bills)
-                }
+// This is the one and only composable you should work directly with the navController
+@Composable
+fun RallyNavHost(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    // The NavHost links the NavController with a navigation graph
+    // where composable destinations are specified.
+    NavHost(
+        navController = navController,
+        startDestination = RallyScreen.Overview.name,
+        modifier = modifier
+    ) {
+        // Here we declare navigation graph
 
-                val accountsName = RallyScreen.Accounts.name
-
-                // Destination with named argument
-                composable(
-                    route = "$accountsName/{name}",
-                    arguments = listOf(
-                        navArgument("name") {
-                            // Make argument type safe
-                            type = NavType.StringType
-                        }
-                    ),
-                    // Enable deep links from outside your app to individual accounts directly by name.
-                    // For this to work don't forget to add an intent filter for RallyActivity
-                    // in the manifest.
-                    // To test deep links run this command from the command line:
-                    // adb shell am start -d "rally://accounts/Checking" -a android.intent.action.VIEW
-                    deepLinks =  listOf(navDeepLink {
-                        uriPattern = "rally://$accountsName/{name}"
-                    })
-                ) { entry ->
-                    // The body of each composable destination receives a parameter
-                    // of the current NavBackStackEntry which models the route and arguments
-                    // of the current destination. We can use arguments to retrieve the argument
-                    // (name in our example)
-
-                    // Look up "name" in NavBackStackEntry's arguments
-                    val accountName = entry.arguments?.getString("name")
-                    // Find first name match in UserData
-                    val account = UserData.getAccount(accountName)
-                    // Pass account to SingleAccountBody
-                    SingleAccountBody(account = account)
+        composable(RallyScreen.Overview.name) {
+            OverviewBody(
+                onClickSeeAllAccounts = { navController.navigate(RallyScreen.Accounts.name) },
+                onClickSeeAllBills = { navController.navigate(RallyScreen.Bills.name) },
+                onAccountClick = { name ->
+                    navigateToSingleAccount(navController, name)
                 }
+            )
+        }
+        composable(RallyScreen.Accounts.name) {
+            AccountsBody(accounts = UserData.accounts) { name ->
+                navigateToSingleAccount(
+                    navController = navController,
+                    accountName = name
+                )
             }
+        }
+        composable(RallyScreen.Bills.name) {
+            BillsBody(bills = UserData.bills)
+        }
+
+        val accountsName = RallyScreen.Accounts.name
+
+        // Destination with named argument
+        composable(
+            route = "$accountsName/{name}",
+            arguments = listOf(
+                navArgument("name") {
+                    // Make argument type safe
+                    type = NavType.StringType
+                }
+            ),
+            // Enable deep links from outside your app to individual accounts directly by name.
+            // For this to work don't forget to add an intent filter for RallyActivity
+            // in the manifest.
+            // To test deep links run this command from the command line:
+            // adb shell am start -d "rally://accounts/Checking" -a android.intent.action.VIEW
+            deepLinks =  listOf(navDeepLink {
+                uriPattern = "rally://$accountsName/{name}"
+            })
+        ) { entry ->
+            // The body of each composable destination receives a parameter
+            // of the current NavBackStackEntry which models the route and arguments
+            // of the current destination. We can use arguments to retrieve the argument
+            // (name in our example)
+
+            // Look up "name" in NavBackStackEntry's arguments
+            val accountName = entry.arguments?.getString("name")
+            // Find first name match in UserData
+            val account = UserData.getAccount(accountName)
+            // Pass account to SingleAccountBody
+            SingleAccountBody(account = account)
         }
     }
 }
