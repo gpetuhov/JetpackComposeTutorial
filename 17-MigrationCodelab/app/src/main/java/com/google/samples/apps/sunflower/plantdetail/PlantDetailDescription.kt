@@ -23,16 +23,46 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.samples.apps.sunflower.R
+import com.google.samples.apps.sunflower.data.Plant
+import com.google.samples.apps.sunflower.viewmodels.PlantDetailViewModel
+
+// These are needed for observeAsState() to work
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+
+// As values emitted by the LiveData can be null,
+// you'd need to wrap it's usage in a null check.
+// Because of that and for reusability purposes,
+// it's a good pattern to split the LiveData
+// consumption and listening in different composables.
+@Composable
+fun PlantDetailDescription(plantDetailViewModel: PlantDetailViewModel) {
+    // Observes values coming from the VM's LiveData<Plant> field
+    val plant by plantDetailViewModel.plant.observeAsState()
+
+    // If plant is not null, display the content
+    plant?.let {
+        PlantDetailContent(it)
+    }
+}
 
 @Composable
-fun PlantDetailDescription() {
-    Surface {
-        Text("Hello Compose")
+fun PlantDetailContent(plant: Plant) {
+    PlantName(plant.name)
+}
+
+@Preview
+@Composable
+private fun PlantDetailContentPreview() {
+    val plant = Plant("id", "Apple", "description", 3, 30, "")
+    MaterialTheme {
+        PlantDetailContent(plant)
     }
 }
 
