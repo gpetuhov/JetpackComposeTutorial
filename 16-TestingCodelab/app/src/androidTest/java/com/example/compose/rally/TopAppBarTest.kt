@@ -50,10 +50,24 @@ class TopAppBarTest {
 
         // You can print the Semantics tree using the printToLog function on a node.
         // This can help in debugging tests that fail.
-        composeTestRule.onRoot().printToLog("currentLabelExists")
+        // in order to see the Semantics tree for the descendants of the node,
+        // pass useUnmergedTree = true
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("currentLabelExists")
 
         composeTestRule
             .onNodeWithContentDescription(RallyScreen.Accounts.name)
+            .assertExists()
+
+        // Here we pass useUnmergedTree = true,
+        // because we have to check the descendant with the specified text.
+        composeTestRule
+            .onNode(
+                hasText(RallyScreen.Accounts.name.toUpperCase()) and
+                        hasParent(
+                            hasContentDescription(RallyScreen.Accounts.name)
+                        ),
+                useUnmergedTree = true
+            )
             .assertExists()
     }
 }
