@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.samples.apps.sunflower.R
@@ -108,8 +109,11 @@ class PlantDetailFragment : Fragment() {
                 }
             }
             composeView.setContent {
-                // You're in Compose world!
-                MaterialTheme {
+                // The MdcTheme function will automatically read the host context's MDC theme
+                // and pass them to MaterialTheme on your behalf for both light and dark themes.
+                // Add dependency for this to work:
+                // implementation "com.google.android.material:compose-theme-adapter:$rootProject.composeVersion"
+                MdcTheme {
                     PlantDetailDescription(plantDetailViewModel)
                 }
             }
